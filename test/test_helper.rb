@@ -37,6 +37,19 @@ class PersonNoKey < ActiveRecord::Base
   autocomplete ['last_name']
 end
 
+class PersonDynamicValue < ActiveRecord::Base
+  self.table_name = 'people'
+
+  extend ConstructorIO
+
+  autocomplete [
+    {
+      item_name: "first_name",
+      url: ->(this){ "/people/" + this.first_name }
+    }
+  ], "person_autocomplete_key"
+end
+
 class FakeView
   include ConstructorIO::Helper
 end
