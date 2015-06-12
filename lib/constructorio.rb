@@ -13,6 +13,8 @@ begin
 rescue LoadError
 end
 
+class MissingItemName < StandardError; end
+
 module ConstructorIO
   class << self
     attr_accessor :configuration
@@ -26,21 +28,26 @@ module ConstructorIO
     yield(configuration)
   end
 
+  # Fields are expected to be something like:
+  # { 'item_name' => 'some_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
   def autocomplete(fields, autocomplete_key = ConstructorIO.configuration.autocomplete_key)
+    # All fields require an item_name
+    field_names = fields.map { |f| f['item_name'] }
+    raise MissingItemName if field_names.include? nil
 
-    fields.each do |field|
-      ConstructorIO::Fields.instance.add(self.model_name, field)
+    field_names.each do |field|
+      ConstructorIO::Fields.instance.add(self.model_name.name, field)
     end
 
     after_save do |record|
-      updated_fields = record.changed.select { |c| fields.include? c }
+      updated_fields = record.changed.select { |c| field_names.include? c }
       updated_fields.each do |field|
         record.class.send(:add_record, record[field.to_sym], autocomplete_key)
       end
     end
 
     before_destroy do |record|
-      fields.each do |field|
+      field_names.each do |field|
         record.class.send(:delete_record, record[field.to_sym], autocomplete_key)
       end
     end

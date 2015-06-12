@@ -10,9 +10,9 @@ module ConstructorIO
       @set = {}
     end
 
-    def add(model, field)
-      @set[model] ||= {}
-      @set[model][field] = 1
+    def add(model_name, field)
+      @set[model_name] ||= {}
+      @set[model_name][field] = 1
     end
 
     def list(model_name)

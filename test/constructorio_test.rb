@@ -43,6 +43,6 @@ class ConstructorIOTest < MiniTest::Test
       address: "Disneyland"
     )
 
-    assert_equal ConstructorIO::Fields.instance.list("Person"), ["first_name"]
+    assert_equal ConstructorIO::Fields.instance.list('Person'), ["first_name"]
   end
 end

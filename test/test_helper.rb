@@ -26,7 +26,7 @@ end
 class Person < ActiveRecord::Base
   extend ConstructorIO
 
-  autocomplete ['first_name'], "person_autocomplete_key"
+  autocomplete [{'item_name' => 'first_name'}], "person_autocomplete_key"
 end
 
 class PersonNoKey < ActiveRecord::Base
@@ -34,7 +34,7 @@ class PersonNoKey < ActiveRecord::Base
 
   extend ConstructorIO
 
-  autocomplete ['last_name']
+  autocomplete [{'item_name' => 'last_name'}]
 end
 
 class FakeView
