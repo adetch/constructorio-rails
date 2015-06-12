@@ -24,7 +24,7 @@ ConstructorIO.configure do |config|
 end
 
 class Person < ActiveRecord::Base
-  extend ConstructorIO
+  include ConstructorIO
 
   autocomplete [{'item_name' => 'first_name'}], "person_autocomplete_key"
 end
@@ -32,7 +32,7 @@ end
 class PersonNoKey < ActiveRecord::Base
   self.table_name = 'people'
 
-  extend ConstructorIO
+  include ConstructorIO
 
   autocomplete [{'item_name' => 'last_name'}]
 end
