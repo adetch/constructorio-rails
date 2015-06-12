@@ -30,7 +30,7 @@ class Person < ActiveRecord::Base
     'item_name' => 'first_name',
     'metadata' => {
       'test_metadata' => 'test_values',
-      'test_proc' => ->{ self }
+      'test_proc' => ->{ self.address.upcase }
     }
   }], "person_autocomplete_key"
 end

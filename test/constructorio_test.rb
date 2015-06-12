@@ -7,7 +7,8 @@ class ConstructorIOTest < MiniTest::Test
       last_name: "Lai",
       address: "New York"
     )
-    person.expects(:call_api).with("post", "Steven", "person_autocomplete_key")
+    person.expects(:make_request_body).returns( { "item_name" => "Steven" } )
+    person.stubs(:send_request).returns(nil)
 
     assert person.save
   end

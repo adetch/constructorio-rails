@@ -44,7 +44,7 @@ module ConstructorIO
       raise MissingItemName if field_names.include? nil
 
       field_names.each do |field|
-        ConstructorIO::Fields.instance.add(self.model_name.name, field)
+        ConstructorIO::Fields.instance.add(self.model_name, field)
       end
 
       # transform the data
@@ -79,12 +79,7 @@ module ConstructorIO
 
     private
 
-    def call_api(method, value, metadata, autocomplete_key)
-      @api_token = ConstructorIO.configuration.api_token
-      @api_url = ConstructorIO.configuration.api_url || "https://ac.constructor.io/"
-      @http_client ||= Faraday.new(url: @api_url)
-      @http_client.basic_auth(@api_token, '')
-
+    def make_request_body(value, metadata)
       request_body = { "item_name" => "#{value}" }
       unless metadata.empty?
         metadata.each do |k, v|
@@ -92,7 +87,20 @@ module ConstructorIO
           request_body[k] = v
         end
       end
+      request_body
+    end
 
+    def call_api(method, value, metadata, autocomplete_key)
+      @api_token = ConstructorIO.configuration.api_token
+      @api_url = ConstructorIO.configuration.api_url || "https://ac.constructor.io/"
+      @http_client ||= Faraday.new(url: @api_url)
+      @http_client.basic_auth(@api_token, '')
+
+      request_body = make_request_body(value, metadata)
+      send_request(method, @http_client, request_body)
+    end
+
+    def send_request(method, http_client, request_body)
       response = @http_client.send(method) do |request|
         request.url "/v1/item?autocomplete_key=#{autocomplete_key}"
         request.headers['Content-Type'] = 'application/json'
