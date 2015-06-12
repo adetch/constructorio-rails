@@ -26,7 +26,13 @@ end
 class Person < ActiveRecord::Base
   include ConstructorIO
 
-  autocomplete [{'item_name' => 'first_name'}], "person_autocomplete_key"
+  autocomplete [{
+    'item_name' => 'first_name',
+    'metadata' => {
+      'test_metadata' => 'test_values',
+      'test_proc' => ->{ self }
+    }
+  }], "person_autocomplete_key"
 end
 
 class PersonNoKey < ActiveRecord::Base
