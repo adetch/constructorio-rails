@@ -97,10 +97,10 @@ module ConstructorIO
       @http_client.basic_auth(@api_token, '')
 
       request_body = make_request_body(value, metadata)
-      send_request(method, @http_client, request_body)
+      send_request(method, @http_client, request_body, autocomplete_key)
     end
 
-    def send_request(method, http_client, request_body)
+    def send_request(method, http_client, request_body, autocomplete_key)
       response = @http_client.send(method) do |request|
         request.url "/v1/item?autocomplete_key=#{autocomplete_key}"
         request.headers['Content-Type'] = 'application/json'
