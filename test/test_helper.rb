@@ -25,9 +25,8 @@ end
 
 class Person < ActiveRecord::Base
   include ConstructorIO
-
   autocomplete [{
-    'item_name' => 'first_name',
+    'attribute' => 'first_name',
     'metadata' => {
       'test_metadata' => 'test_values',
       'test_proc' => ->{ self.address.upcase }
@@ -35,12 +34,16 @@ class Person < ActiveRecord::Base
   }], "person_autocomplete_key"
 end
 
+class PersonSimple < ActiveRecord::Base
+  self.table_name = 'people'
+  include ConstructorIO
+  autocomplete [ 'first_name' ]
+end
+
 class PersonNoKey < ActiveRecord::Base
   self.table_name = 'people'
-
   include ConstructorIO
-
-  autocomplete [{'item_name' => 'last_name'}]
+  autocomplete [{'attribute' => 'last_name'}]
 end
 
 class FakeView

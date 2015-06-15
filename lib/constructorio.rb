@@ -36,11 +36,13 @@ module ConstructorIO
   end
 
   module ClassMethods
-    # Fields are expected to be something like:
-    # { 'item_name' => 'some_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
+    # "fields" is expected to be an array of strings or an array of hashes, like:
+    # "product_name", "description"
+    # - or -
+    # { 'attribute' => 'product_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
     def autocomplete(fields, autocomplete_key = ConstructorIO.configuration.autocomplete_key)
-      # All fields require an item_name
-      field_names = fields.map { |f| f['item_name'] }
+      # All fields require an attribute
+      field_names = fields.map { |f| f.is_a?(String) ? f : f['attribute'] }
       raise MissingItemName if field_names.include? nil
 
       field_names.each do |field|
@@ -50,7 +52,11 @@ module ConstructorIO
       # transform the data
       transformed = {}
       fields.each do |field|
-        transformed[field['item_name']] = field['metadata']
+        if field.is_a?(String)
+          transformed[field] = {}
+        else
+          transformed[field['attribute']] = field['metadata']
+        end
       end
 
       after_save do |record|
@@ -91,17 +97,17 @@ module ConstructorIO
     end
 
     def call_api(method, value, metadata, autocomplete_key)
-      @api_token = ConstructorIO.configuration.api_token
-      @api_url = ConstructorIO.configuration.api_url || "https://ac.constructor.io/"
-      @http_client ||= Faraday.new(url: @api_url)
-      @http_client.basic_auth(@api_token, '')
+      api_token = ConstructorIO.configuration.api_token
+      api_url = ConstructorIO.configuration.api_url || "https://ac.constructor.io/"
+      @http_client ||= Faraday.new(url: api_url)
+      @http_client.basic_auth(api_token, '')
 
       request_body = make_request_body(value, metadata)
       send_request(method, @http_client, request_body, autocomplete_key)
     end
 
     def send_request(method, http_client, request_body, autocomplete_key)
-      response = @http_client.send(method) do |request|
+      response = http_client.send(method) do |request|
         request.url "/v1/item?autocomplete_key=#{autocomplete_key}"
         request.headers['Content-Type'] = 'application/json'
         request.body = request_body.to_json

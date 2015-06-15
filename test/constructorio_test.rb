@@ -14,6 +14,19 @@ class ConstructorIOTest < MiniTest::Test
     assert person.save
   end
 
+  def test_add_simple_record_makes_request
+    person = PersonSimple.new(
+      first_name: "Steven",
+      last_name: "Lai",
+      address: "New York"
+    )
+
+    person.stubs(:send_request)
+
+    person.expects(:make_request_body)
+    assert person.save
+  end
+
   def test_add_record_accepts_procs
     person = Person.new(
       first_name: "Steven",
@@ -26,6 +39,22 @@ class ConstructorIOTest < MiniTest::Test
       instance_of(Faraday::Connection),
       {'item_name' => 'Steven', 'test_metadata' => 'test_values', 'test_proc' => 'NEW YORK'},
       'person_autocomplete_key'
+    )
+    assert person.save
+  end
+
+  def test_add_simple_record_accepts_procs
+    person = PersonSimple.new(
+      first_name: "Steven",
+      last_name: "Lai",
+      address: "New York"
+    )
+
+    person.expects(:send_request).with(
+      'post',
+      instance_of(Faraday::Connection),
+      {'item_name' => 'Steven'},
+      'example_autocomplete_key'
     )
     assert person.save
   end
