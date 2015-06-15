@@ -31,7 +31,7 @@ To add autocomplete to a model:
 
 ```
 class MyModel < ActiveRecord::Base
-  extend ConstructorIO
+  include ConstructorIO
   autocomplete(['attribute1', 'attribute2'])
 end
 

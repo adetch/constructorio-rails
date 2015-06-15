@@ -8,9 +8,9 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.stubs(:send_request)
+    person.stubs(:constructorio_send_request)
 
-    person.expects(:make_request_body)
+    person.expects(:constructorio_make_request_body)
     assert person.save
   end
 
@@ -21,9 +21,9 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.stubs(:send_request)
+    person.stubs(:constructorio_send_request)
 
-    person.expects(:make_request_body)
+    person.expects(:constructorio_make_request_body)
     assert person.save
   end
 
@@ -34,7 +34,7 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.expects(:send_request).with(
+    person.expects(:constructorio_send_request).with(
       'post',
       instance_of(Faraday::Connection),
       {'item_name' => 'Steven', 'test_metadata' => 'test_values', 'test_proc' => 'NEW YORK'},
@@ -50,7 +50,7 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.expects(:send_request).with(
+    person.expects(:constructorio_send_request).with(
       'post',
       instance_of(Faraday::Connection),
       {'item_name' => 'Steven'},
@@ -66,19 +66,19 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.expects(:send_request)
+    person.expects(:constructorio_send_request)
     assert person.save
   end
 
   def test_delete_record_makes_request
-    Person.any_instance.stubs(:call_api)
+    Person.any_instance.stubs(:constructorio_call_api)
     person = Person.create(
       first_name: "Ronald",
       last_name: "McDonald",
       address: "Disneyland"
     )
 
-    person.expects(:call_api).with("delete", "Ronald", has_entry('test_proc', instance_of(Proc)),"person_autocomplete_key")
+    person.expects(:constructorio_call_api).with("delete", "Ronald", has_entry('test_proc', instance_of(Proc)),"person_autocomplete_key")
     person.destroy
   end
 
@@ -89,12 +89,12 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.expects(:call_api).with("post", "Lai", anything, ConstructorIO.configuration.autocomplete_key)
+    person.expects(:constructorio_call_api).with("post", "Lai", anything, ConstructorIO.configuration.autocomplete_key)
     assert person.save
   end
 
   def test_fields_are_tracked
-    Person.any_instance.expects(:call_api).with("post", "Ronald", anything, "person_autocomplete_key")
+    Person.any_instance.expects(:constructorio_call_api).with("post", "Ronald", anything, "person_autocomplete_key")
     person = Person.create(
       first_name: "Ronald",
       last_name: "McDonald",
