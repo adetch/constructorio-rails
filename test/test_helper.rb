@@ -25,7 +25,7 @@ end
 
 class Person < ActiveRecord::Base
   include ConstructorIO
-  autocomplete [{
+  constructorio_autocomplete [{
     'attribute' => 'first_name',
     'metadata' => {
       'test_metadata' => 'test_values',
@@ -37,13 +37,13 @@ end
 class PersonSimple < ActiveRecord::Base
   self.table_name = 'people'
   include ConstructorIO
-  autocomplete [ 'first_name' ]
+  constructorio_autocomplete [ 'first_name' ]
 end
 
 class PersonNoKey < ActiveRecord::Base
   self.table_name = 'people'
   include ConstructorIO
-  autocomplete [{'attribute' => 'last_name'}]
+  constructorio_autocomplete [{'attribute' => 'last_name'}]
 end
 
 class FakeView

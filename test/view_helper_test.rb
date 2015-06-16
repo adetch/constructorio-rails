@@ -6,6 +6,6 @@ class ViewHelperTest < MiniTest::Test
   end
 
   def test_autocomplete_html
-    assert_equal @fakeview.autocomplete(dom_id: 'a'), "<script type=\"text/javascript\" src=\"//cnstrc.com/js/ac.js\"></script>\n<script>$(document).ready(function(){ $('#a').constructorAutocomplete({ key: 'example_autocomplete_key' }); })</script>"
+    assert_equal @fakeview.constructorio_autocomplete(dom_id: 'a'), "<script type=\"text/javascript\" src=\"//cnstrc.com/js/ac.js\"></script>\n<script>$(document).ready(function(){ $('#a').constructorAutocomplete({ key: 'example_autocomplete_key' }); })</script>"
   end
 end

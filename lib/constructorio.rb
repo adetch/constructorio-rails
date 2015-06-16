@@ -40,7 +40,7 @@ module ConstructorIO
     # "product_name", "description"
     # - or -
     # { 'attribute' => 'product_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
-    def autocomplete(fields, autocomplete_key = ConstructorIO.configuration.autocomplete_key)
+    def constructorio_autocomplete(fields, autocomplete_key = ConstructorIO.configuration.autocomplete_key)
       # All fields require an attribute
       field_names = fields.map { |f| f.is_a?(String) ? f : f['attribute'] }
       raise MissingItemName if field_names.include? nil

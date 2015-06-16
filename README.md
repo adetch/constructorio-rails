@@ -32,7 +32,7 @@ To add autocomplete to a model:
 ```
 class MyModel < ActiveRecord::Base
   include ConstructorIO
-  autocomplete(['attribute1', 'attribute2'])
+  constructorio_autocomplete(['attribute1', 'attribute2'])
 end
 
 ```
@@ -40,7 +40,7 @@ end
 To attach an autocomplete dropdown to an input field, just insert this in your view:
 
 ```
-<%= autocomplete(dom_id: 'id_of_input_field') %>
+<%= constructorio_autocomplete(dom_id: 'id_of_input_field') %>
 ```
 
 To import an existing data set into Constructor.io, you can use the rake task:
