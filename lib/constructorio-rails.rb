@@ -1,12 +1,12 @@
-require 'constructorio/version'
-require 'constructorio/configuration'
-require 'constructorio/helper'
-require 'constructorio/fields'
+require 'constructorio-rails/version'
+require 'constructorio-rails/configuration'
+require 'constructorio-rails/helper'
+require 'constructorio-rails/fields'
 require 'active_record'
 require 'faraday'
 require 'active_support/core_ext/string/output_safety'
 
-require 'constructorio/railtie' if defined?(Rails)
+require 'constructorio-rails/railtie' if defined?(Rails)
 
 begin
   require 'pry'
@@ -15,7 +15,7 @@ end
 
 class MissingItemName < StandardError; end
 
-module ConstructorIO
+module ConstructorIORails
 
   class << self
     attr_accessor :configuration
@@ -40,13 +40,13 @@ module ConstructorIO
     # "product_name", "description"
     # - or -
     # { 'attribute' => 'product_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
-    def constructorio_autocomplete(fields, autocomplete_key = ConstructorIO.configuration.autocomplete_key)
+    def constructorio_autocomplete(fields, autocomplete_key = ConstructorIORails.configuration.autocomplete_key)
       # All fields require an attribute
       field_names = fields.map { |f| f.is_a?(String) ? f : f['attribute'] }
       raise MissingItemName if field_names.include? nil
 
       field_names.each do |field|
-        ConstructorIO::Fields.instance.add(self.model_name, field)
+        ConstructorIORails::Fields.instance.add(self.model_name, field)
       end
 
       # transform the data
@@ -97,8 +97,8 @@ module ConstructorIO
     end
 
     def constructorio_call_api(method, value, metadata, autocomplete_key)
-      api_token = ConstructorIO.configuration.api_token
-      api_url = ConstructorIO.configuration.api_url || "https://ac.constructor.io/"
+      api_token = ConstructorIORails.configuration.api_token
+      api_url = ConstructorIORails.configuration.api_url || "https://ac.constructor.io/"
       @http_client ||= Faraday.new(url: api_url)
       @http_client.basic_auth(api_token, '')
 

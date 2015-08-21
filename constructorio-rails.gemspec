@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'constructorio/version'
+require 'constructorio-rails/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "constructorio"
-  spec.version       = ConstructorIO::VERSION
+  spec.name          = "constructorio-rails"
+  spec.version       = ConstructorIORails::VERSION
   spec.authors       = ["Steven Lai"]
   spec.email         = ["lai.steven@gmail.com"]
-  spec.summary       = %q{Ruby gem for Constructor.io}
-  spec.description   = %q{Ruby gem for Constructor.io's autocomplete service. Enables Rails models to send updates to the Constructor.io API automatically, and provides a view helper to add autocomplete on any input.}
+  spec.summary       = %q{Rails gem for Constructor.io}
+  spec.description   = %q{Rails gem for Constructor.io's autocomplete service. Enables Rails models to send updates to the Constructor.io API automatically, and provides a view helper to add autocomplete on any input.}
   spec.homepage      = "http://constructor.io"
   spec.license       = "MIT"
 

@@ -1,6 +1,6 @@
 require 'singleton'
 
-module ConstructorIO
+module ConstructorIORails
   class Fields
     include Singleton
 

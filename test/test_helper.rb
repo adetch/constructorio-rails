@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/unit'
 require 'mocha/mini_test'
-require_relative '../lib/constructorio'
+require_relative '../lib/constructorio-rails'
 
 
 ActiveRecord::Base.establish_connection(
@@ -17,14 +17,14 @@ ActiveRecord::Schema.define do
   end
 end
 
-ConstructorIO.configure do |config|
+ConstructorIORails.configure do |config|
   config.api_token = "example_api_token"
   config.autocomplete_key = "example_autocomplete_key"
   config.api_url = "http://example.constructor.io"
 end
 
 class Person < ActiveRecord::Base
-  include ConstructorIO
+  include ConstructorIORails
   constructorio_autocomplete [{
     'attribute' => 'first_name',
     'metadata' => {
@@ -36,16 +36,16 @@ end
 
 class PersonSimple < ActiveRecord::Base
   self.table_name = 'people'
-  include ConstructorIO
+  include ConstructorIORails
   constructorio_autocomplete [ 'first_name' ]
 end
 
 class PersonNoKey < ActiveRecord::Base
   self.table_name = 'people'
-  include ConstructorIO
+  include ConstructorIORails
   constructorio_autocomplete [{'attribute' => 'last_name'}]
 end
 
 class FakeView
-  include ConstructorIO::Helper
+  include ConstructorIORails::Helper
 end

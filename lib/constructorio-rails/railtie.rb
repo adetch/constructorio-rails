@@ -1,10 +1,10 @@
 require 'rails'
 
-module ConstructorIO
+module ConstructorIORails
   class Railtie < Rails::Railtie
     initializer 'constructorio.action_view' do
       ActiveSupport.on_load(:action_view) do
-        include ConstructorIO::Helper
+        include ConstructorIORails::Helper
       end
     end
 

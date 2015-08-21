@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class ConstructorIOTest < MiniTest::Test
+class ConstructorIORailsTest < MiniTest::Test
   def test_add_record_makes_request
     person = Person.new(
       first_name: "Steven",
@@ -89,7 +89,7 @@ class ConstructorIOTest < MiniTest::Test
       address: "New York"
     )
 
-    person.expects(:constructorio_call_api).with("post", "Lai", anything, ConstructorIO.configuration.autocomplete_key)
+    person.expects(:constructorio_call_api).with("post", "Lai", anything, ConstructorIORails.configuration.autocomplete_key)
     assert person.save
   end
 
@@ -101,6 +101,6 @@ class ConstructorIOTest < MiniTest::Test
       address: "Disneyland"
     )
 
-    assert_equal ConstructorIO::Fields.instance.list('Person'), ["first_name"]
+    assert_equal ConstructorIORails::Fields.instance.list('Person'), ["first_name"]
   end
 end
