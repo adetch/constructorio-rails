@@ -98,7 +98,7 @@ module ConstructorIORails
 
     def constructorio_call_api(method, value, metadata, autocomplete_key)
       api_token = ConstructorIORails.configuration.api_token
-      api_url = ConstructorIORails.configuration.api_url || "https://ac.constructor.io/"
+      api_url = ConstructorIORails.configuration.api_url || "https://ac.cnstrc.com/"
       @http_client ||= Faraday.new(url: api_url)
       @http_client.basic_auth(api_token, '')
 

@@ -1,4 +1,4 @@
-# usage: <%= autocomplete :dom_id => "search" %>
+# usage: <%= constructorio_autocomplete :dom_id => "search" %>
 
 module ConstructorIORails
   module Helper
