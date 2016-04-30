@@ -1,6 +1,6 @@
 # Constructor.io
 
-A Rails client for the [Constructor.io API](http://constructor.io/docs).  Constructor.io provides a lightning-fast, typo-tolerant autocomplete service that ranks your users' queries by popularity to let them find what they're looking for as quickly as possible.
+A Rails client for the [Constructor.io API](https://constructor.io/docs).  Constructor.io provides a lightning-fast, typo-tolerant autocomplete service that ranks your users' queries by popularity to let them find what they're looking for as quickly as possible.
 
 ## Installation
 
@@ -14,17 +14,18 @@ And then execute:
 
 Or install it yourself:
 
-    $ gem install customerio-rails
+    $ gem install constructorio-rails
 
 ## Usage
 
 ### Configuration for Rails
 
-Add an initializer file at config/initializers/constructor-io.rb with values from the [customer dashboard](http://constructor.io/dashboard):
+Add an initializer file at config/initializers/constructor-io.rb with values from the [customer dashboard](https://constructor.io/dashboard):
 ```
 ConstructorIORails.configure do |config|
   config.api_token = 'API_TOKEN'
   config.autocomplete_key = 'AUTOCOMPLETE_KEY'
+  config.autocomplete_section = 'Search Suggestions'
 end
 ```
 To add autocomplete to a model:
