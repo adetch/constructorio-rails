@@ -10,13 +10,13 @@ namespace :constructorio do
   namespace :import do
     desc import_model_desc
 
-    task :model do
+    task :model => :environment do
       klass  = eval(ENV['CLASS'].to_s)
       fields = ConstructorIORails::Fields.instance.list(klass.model_name)
       if fields.any?
         klass.all.each do |record|
           fields.each do |field|
-            klass.add_record(record[field.to_sym], ConstructorIORails.configuration.autocomplete_key)
+            record.constructorio_add_record(record[field.to_sym], {}, ConstructorIORails.configuration.autocomplete_key, ConstructorIORails.configuration.autocomplete_section)
           end
         end
       end

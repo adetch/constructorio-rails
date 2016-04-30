@@ -40,7 +40,9 @@ module ConstructorIORails
     # "product_name", "description"
     # - or -
     # { 'attribute' => 'product_name', 'metadata' => { metadata_one => ->{ something_dynamic }} }
-    def constructorio_autocomplete(fields, autocomplete_key = ConstructorIORails.configuration.autocomplete_key)
+    def constructorio_autocomplete(fields,
+                                   autocomplete_key = ConstructorIORails.configuration.autocomplete_key,
+                                   autocomplete_section = ConstructorIORails.configuration.autocomplete_section)
       # All fields require an attribute
       field_names = fields.map { |f| f.is_a?(String) ? f : f['attribute'] }
       raise MissingItemName if field_names.include? nil
@@ -62,31 +64,34 @@ module ConstructorIORails
       after_save do |record|
         updated_fields = record.changed.select { |c| field_names.include? c }
         updated_fields.each do |field|
-          record.send(:constructorio_add_record, record[field.to_sym], transformed[field], autocomplete_key)
+          record.send(:constructorio_add_record, record[field.to_sym], transformed[field], autocomplete_key, autocomplete_section)
         end
       end
 
       before_destroy do |record|
         field_names.each do |field|
-          record.send(:constructorio_delete_record, record[field.to_sym], transformed[field], autocomplete_key)
+          record.send(:constructorio_delete_record, record[field.to_sym], transformed[field], autocomplete_key, autocomplete_section)
         end
       end
     end
   end
 
   module InstanceMethods
-    def constructorio_add_record(value, metadata = {}, autocomplete_key)
-      constructorio_call_api("post", value, metadata, autocomplete_key)
+    def constructorio_add_record(value, metadata = {}, autocomplete_key, autocomplete_section)
+      constructorio_call_api("post", value, metadata, autocomplete_key, autocomplete_section)
     end
 
-    def constructorio_delete_record(value, metadata = {}, autocomplete_key)
-      constructorio_call_api("delete", value, metadata, autocomplete_key)
+    def constructorio_delete_record(value, metadata = {}, autocomplete_key, autocomplete_section)
+      constructorio_call_api("delete", value, metadata, autocomplete_key, autocomplete_section)
     end
 
     private
 
-    def constructorio_make_request_body(value, metadata)
-      request_body = { "item_name" => "#{value}" }
+    def constructorio_make_request_body(value, metadata, autocomplete_section)
+      request_body = {
+        "item_name" => "#{value}",
+        "autocomplete_section" => autocomplete_section
+      }
       unless metadata.empty?
         metadata.each do |k, v|
           v = instance_exec(&v) if v.is_a? Proc
@@ -96,13 +101,13 @@ module ConstructorIORails
       request_body
     end
 
-    def constructorio_call_api(method, value, metadata, autocomplete_key)
+    def constructorio_call_api(method, value, metadata, autocomplete_key, autocomplete_section)
       api_token = ConstructorIORails.configuration.api_token
       api_url = ConstructorIORails.configuration.api_url || "https://ac.cnstrc.com/"
       @http_client ||= Faraday.new(url: api_url)
       @http_client.basic_auth(api_token, '')
 
-      request_body = constructorio_make_request_body(value, metadata)
+      request_body = constructorio_make_request_body(value, metadata, autocomplete_section)
       constructorio_send_request(method, @http_client, request_body, autocomplete_key)
     end
 
